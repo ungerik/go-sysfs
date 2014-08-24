@@ -37,6 +37,6 @@ func (obj Object) Attributes() []Attribute {
 	return attribs
 }
 
-func (obj Object) Attribute(name string) Attribute {
-	return Attribute{Path: string(obj) + "/" + name}
+func (obj Object) Attribute(name string) *Attribute {
+	return &Attribute{Path: string(obj) + "/" + name}
 }
