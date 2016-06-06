@@ -22,6 +22,11 @@ func (attrib *Attribute) Open() (err error) {
 	return err
 }
 
+func (attrib *Attribute) OpenRO() (err error) {
+	attrib.File, err = os.OpenFile(attrib.Path, os.O_RDONLY|syscall.O_NONBLOCK, 0666)
+	return err
+}
+
 func (attrib *Attribute) Close() (err error) {
 	err = attrib.File.Close()
 	attrib.File = nil
@@ -47,7 +52,7 @@ func (attrib *Attribute) Ioctl(request, arg uintptr) (result uintptr, errno sysc
 
 func (attrib *Attribute) Read() (str string, err error) {
 	if attrib.File == nil {
-		err = attrib.Open()
+		err = attrib.OpenRO()
 		if err != nil {
 			return
 		}
