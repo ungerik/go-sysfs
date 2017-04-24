@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
+	"strings"
 	"syscall"
 )
 
@@ -225,6 +226,21 @@ func (attrib *Attribute) ReadInt() (value int, err error) {
 	return strconv.Atoi(s)
 }
 
+func (attrib *Attribute) ReadUint64() (value uint64, err error) {
+	s, err := attrib.Read()
+	if err != nil {
+		return 0, err
+	}
+
+	s = strings.TrimSpace(s)
+
+	return strconv.ParseUint(s, 10, 64)
+}
+
 func (attrib *Attribute) WriteInt(value int) (err error) {
 	return attrib.Write(strconv.Itoa(value))
+}
+
+func (attrib *Attribute) WriteUint64(value uint64) (err error) {
+	return attrib.Write(strconv.FormatUint(value, 10))
 }
