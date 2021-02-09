@@ -61,10 +61,18 @@ func lsDirs(dir string, callback func(name string)) error {
 	if err != nil {
 		return err
 	}
-	for i := range fileInfos {
-		if fileInfos[i].IsDir() {
-			callback(fileInfos[i].Name())
+	for _, fi := range fileInfos {
+		var (
+			isDir     = fi.IsDir()
+			isSymlink = fileModeIsSymlink(fi.Mode())
+		)
+		if isDir || isSymlink {
+			callback(fi.Name())
 		}
 	}
 	return nil
+}
+
+func fileModeIsSymlink(mode os.FileMode) bool {
+	return (mode & os.ModeSymlink) != 0
 }
